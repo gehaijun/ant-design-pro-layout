@@ -16,7 +16,7 @@ export interface TopNavHeaderProps extends SiderMenuProps {
   onCollapse?: (collapse: boolean) => void;
   rightContentRender?: HeaderViewProps['rightContentRender'];
 }
-
+const baseClassName = 'ant-pro-top-nav-header';
 /**
  * 抽离出来是为了防止 rightSize 经常改变导致菜单 render
  * @param param0
@@ -28,15 +28,12 @@ const RightContent: React.FC<TopNavHeaderProps> = ({
   const [rightSize, setRightSize] = useState<number | string>('auto');
 
   return (
-    <div
+    <div className={`${baseClassName}-right-wrapper`}
       style={{
         minWidth: rightSize,
       }}
     >
-      <div
-        style={{
-          paddingRight: 8,
-        }}
+      <div className={`${baseClassName}-right-content`}
       >
         <ResizeObserver
           onResize={({ width }: { width: number }) => {
@@ -47,7 +44,7 @@ const RightContent: React.FC<TopNavHeaderProps> = ({
           }}
         >
           {rightContentRender && (
-            <div>
+            <div style={{height:'100%'}}>
               {rightContentRender({
                 ...props,
               })}
@@ -69,7 +66,7 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
     className: propsClassName,
     style,
   } = props;
-  const baseClassName = 'ant-pro-top-nav-header';
+
   const headerDom = defaultRenderLogoAndTitle({ ...props, collapsed: false });
 
   const className = classNames(baseClassName, propsClassName, {
