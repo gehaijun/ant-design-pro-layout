@@ -27,6 +27,7 @@ export const defaultRenderLogoAndTitle = (
     logo = 'https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg',
     title,
     menuHeaderRender,
+    headerHeight = 64,
   } = props;
   if (menuHeaderRender === false) {
     return null;
@@ -39,7 +40,7 @@ export const defaultRenderLogoAndTitle = (
     return menuHeaderRender(logoDom, props.collapsed ? null : titleDom, props);
   }
   return (
-    <a href="/">
+    <a href="/" style={{ height: headerHeight }}>
       {logoDom}
       {props.collapsed ? null : titleDom}
     </a>
@@ -64,6 +65,7 @@ export interface SiderMenuProps
   style?: CSSProperties;
   links?: React.ReactNode[];
   onOpenChange?: (openKeys: WithFalse<string[]>) => void;
+  headerHeight?: number;
 }
 
 const SiderMenu: React.FC<SiderMenuProps> = (props) => {
@@ -117,12 +119,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
         </div>
       )}
       {flatMenuKeys && (
-        <BaseMenu
-          {...props}
-          mode="inline"
-          handleOpenChange={onOpenChange}
-          style={{ padding: '16px 0', width: '100%' }}
-        />
+        <BaseMenu {...props} mode="inline" handleOpenChange={onOpenChange} />
       )}
       {links && links.length > 0 && (
         <div className="ant-pro-sider-menu-links">

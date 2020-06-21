@@ -31,7 +31,7 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   };
 };
 
-const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
+const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const [collapsed, handleMenuCollapse] = useState<boolean>(false);
   const [settings, setSettings] = useState<Partial<Settings>>({
     ...defaultSettings,
@@ -41,8 +41,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     <>
       <ProLayout
         logo={logo}
-        menuHeaderRender={(logoDom, titleDom) => (
-          <Link to="/">
+        menuHeaderRender={(logoDom, titleDom, props?) => (
+          <Link to="/" style={{ height: props?.headerHeight }}>
             {logoDom}
             {titleDom}
           </Link>
@@ -63,7 +63,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             </Link>
           )
         }
-        rightContentRender={() =><RightContent/>}
+        rightContentRender={() => <RightContent />}
         collapsed={collapsed}
         onMenuHeaderClick={() => history.push('/')}
         footerRender={() => <DefaultFooter />}
@@ -80,7 +80,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         // hideCopyButton
         // hideHintAlert
         settings={settings}
-        onSettingChange={(config) => setSettings(config)}
+        onSettingChange={config => setSettings(config)}
       />
     </>
   );

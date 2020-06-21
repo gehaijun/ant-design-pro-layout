@@ -1,6 +1,6 @@
 import './BasicLayout.less';
 
-import React, { CSSProperties, useContext, useEffect } from 'react';
+import React, { CSSProperties, useContext, useEffect, useMemo } from 'react';
 import { BreadcrumbProps as AntdBreadcrumbProps } from 'antd/es/breadcrumb';
 import { Layout } from 'antd';
 import classNames from 'classnames';
@@ -28,7 +28,7 @@ import SiderMenu from './SiderMenu';
 import { SiderMenuProps } from './SiderMenu/SiderMenu';
 import { getBreadcrumbProps } from './utils/getBreadcrumbProps';
 import getMenuData from './utils/getMenuData';
-import { isBrowser, useDeepCompareEffect } from './utils/utils';
+import { isBrowser } from './utils/utils';
 import PageLoading from './PageLoading';
 import MenuCounter from './SiderMenu/Counter';
 import WrapContent from './WrapContent';
@@ -245,56 +245,14 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
   const colSize = useAntdMediaQuery();
   const { routes = [] } = route;
-  const [menuInfoData, setMenuInfoData] = useMergeValue<{
-    breadcrumb?: {
-      [key: string]: MenuDataItem;
-    };
-    breadcrumbMap?: Map<string, MenuDataItem>;
-    menuData?: MenuDataItem[];
-  }>(() => getMenuData(routes, menu, formatMessage, menuDataRender));
 
-  let renderMenuInfoData: {
-    breadcrumb?: {
-      [key: string]: MenuDataItem;
-    };
-    breadcrumbMap?: Map<string, MenuDataItem>;
-    menuData?: MenuDataItem[];
-  } = {};
-
-  // 如果menuDataRender 存在，就应该每次都render一下，不然无法保证数据的同步
-  if (menuDataRender) {
-    renderMenuInfoData = getMenuData(
-      routes,
-      menu,
-      formatMessage,
-      menuDataRender,
-    );
-  }
+  const { breadcrumb = {}, breadcrumbMap, menuData = [] } = useMemo(
+    () => getMenuData(routes, menu, formatMessage, menuDataRender),
+    [props.route, stringify(menu)],
+  );
 
   const isMobile =
     (colSize === 'sm' || colSize === 'xs') && !props.disableMobile;
-
-  const { breadcrumb = {}, breadcrumbMap, menuData = [] } = !menuDataRender
-    ? menuInfoData
-    : renderMenuInfoData;
-
-  /**
-   *  如果 menuRender 不存在，可以做一下性能优化
-   *  只要 routers 没有更新就不需要重新计算
-   */
-  useDeepCompareEffect(() => {
-    if (!menuDataRender) {
-      const infoData = getMenuData(routes, menu, formatMessage, menuDataRender);
-      // 稍微慢一点 render，不然会造成性能问题，看起来像是菜单的卡顿
-      const animationFrameId = requestAnimationFrame(() => {
-        setMenuInfoData(infoData);
-      });
-      return () =>
-        window.cancelAnimationFrame &&
-        window.cancelAnimationFrame(animationFrameId);
-    }
-    return () => null;
-  }, [props.route, stringify(menu)]);
 
   // If it is a fix menu, calculate padding
   // don't need padding in phone mode

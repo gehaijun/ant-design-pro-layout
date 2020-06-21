@@ -183,12 +183,7 @@ class MenuUtil {
   getMenuItemPath = (item: MenuDataItem) => {
     const itemPath = this.conversionPath(item.path || '/');
     const icon = getIcon(item.icon);
-    const {
-      location = { pathname: '/' },
-      isMobile,
-      onCollapse,
-      menuItemRender,
-    } = this.props;
+    const { isMobile, onCollapse, menuItemRender } = this.props;
     const { target } = item;
     // if local is true formatMessage all name。
     const name = this.getIntlName(item);
@@ -215,7 +210,6 @@ class MenuUtil {
           isUrl: isHttpUrl,
           itemPath,
           isMobile,
-          replace: itemPath === location.pathname,
           onClick: () => onCollapse && onCollapse(true),
         },
         defaultItem,
@@ -345,9 +339,12 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
   const cls = classNames(className, {
     'top-nav-menu': mode === 'horizontal',
   });
-  const menuUtils = new MenuUtil(props);
 
-  const postData = props.postMenuData ? props.postMenuData(menuData) : menuData;
+  const menuItems = React.useMemo(() => {
+    return new MenuUtil(props).getNavMenuItems(
+      props.postMenuData ? props.postMenuData(menuData) : menuData,
+    );
+  }, [menuData, menu.locale, props.isMobile]);
 
   // 这次 openKeys === false 的时候的情况，这种情况下帮用户选中一次
   // 第二次以后不再关系，所以用了 defaultOpenKeys
@@ -372,13 +369,9 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
       onOpenChange={setOpenKeys}
       {...props.menuProps}
     >
-      {menuUtils.getNavMenuItems(postData)}
+      {menuItems}
     </Menu>
   );
-};
-
-BaseMenu.defaultProps = {
-  postMenuData: (data) => data || [],
 };
 
 export default BaseMenu;

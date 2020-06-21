@@ -19,6 +19,7 @@ export interface GlobalHeaderProps {
   className?: string;
   style?: React.CSSProperties;
   menuHeaderRender?: SiderMenuProps['menuHeaderRender'];
+  headerHeight?: number;
 }
 
 const defaultRenderCollapsedButton = (collapsed?: boolean) =>
@@ -77,12 +78,17 @@ export default class GlobalHeader extends Component<GlobalHeaderProps> {
       rightContentRender,
       menuHeaderRender,
       className: propClassName,
+      headerHeight,
       style,
     } = this.props;
     const className = classNames(propClassName, 'ant-pro-global-header');
 
     const logoDom = (
-      <span className="ant-pro-global-header-logo" key="logo">
+      <span
+        className="ant-pro-global-header-logo"
+        key="logo"
+        style={{ height: headerHeight }}
+      >
         {defaultRenderLogo(logo)}
       </span>
     );
