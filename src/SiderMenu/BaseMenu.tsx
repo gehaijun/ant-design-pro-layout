@@ -115,6 +115,14 @@ class MenuUtil {
       .map((item) => this.getSubMenuOrItem(item))
       .filter((item) => item);
 
+  hasChildren = (item: MenuDataItem) => {
+    return (
+      !item.hideChildrenInMenu &&
+      item.children &&
+      item.children.some((child) => child && !!child.name && !child.hideInMenu)
+    );
+  };
+
   /**
    * get SubMenu or Item
    */
@@ -204,18 +212,18 @@ class MenuUtil {
       );
     }
     if (menuItemRender) {
-      const renderItemProps = {
-        ...item,
-        isUrl: isHttpUrl,
-        itemPath,
-        isMobile,
-        onClick: () => onCollapse && onCollapse(true),
-      };
-      // 如果 hideChildrenInMenu 删除掉无用的 children
-      if (renderItemProps.hideChildrenInMenu) {
-        delete renderItemProps.children;
-      }
-      return menuItemRender(renderItemProps, defaultItem);
+      return menuItemRender(
+        {
+          ...item,
+          isUrl: isHttpUrl,
+          itemPath,
+          isMobile,
+          onClick: () => onCollapse && onCollapse(true),
+          // 如果 hideChildrenInMenu  children 不应该使用
+          children: !this.hasChildren(item) ? undefined : item.children,
+        },
+        defaultItem,
+      );
     }
     return defaultItem;
   };
