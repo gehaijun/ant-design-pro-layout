@@ -37,11 +37,35 @@
       animation-duration: 0.3s;
     }
   }
+
   &-sider {
     position: relative;
     z-index: 10;
     min-height: 100%;
     box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+    .ant-layout-sider-children {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 0 5px rgba(37, 37, 37, 0.05);
+      }
+
+      /* 滚动条滑块 */
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.05);
+      }
+    }
     &.fix-sider-bar {
       position: fixed;
       top: 0;
@@ -49,9 +73,6 @@
       height: 100%;
       overflow: auto;
       box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
-      &::-webkit-scrollbar {
-        display: none;
-      }
       > .ant-menu-root {
         :not(.@{pro-layout-sider-menu-prefix-cls}-link-menu) {
           height: ~'calc(100vh - @{nav-header-height})';
@@ -60,7 +81,7 @@
       }
 
       .ant-menu-inline {
-        background-color: none;
+        background-color: unset;
         border-right: 0;
 
         .ant-menu-item,
@@ -78,6 +99,17 @@
           color: @primary-color;
         }
       }
+      .ant-layout-sider-children ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.06);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 21, 41, 0.05);
+      }
+
+      .ant-layout-sider-children ::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.12);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 21, 41, 0.05);
+      }
       .ant-menu-light {
         border-right-color: transparent;
       }
@@ -90,8 +122,6 @@
   }
 
   &-links {
-    position: absolute;
-    bottom: 12px;
     width: 100%;
     ul.ant-menu-root {
       height: auto;

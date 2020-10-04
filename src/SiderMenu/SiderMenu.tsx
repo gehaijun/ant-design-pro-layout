@@ -91,7 +91,19 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
 
   const headerDom = defaultRenderLogoAndTitle(props);
 
-  return (
+  return (<>
+    { fixSiderbar && (
+      <div
+        style={{
+          width: collapsed ? 80 : siderWidth,
+          overflow: 'hidden',
+          flex: `0 0 ${collapsed ? 80 : siderWidth}px`,
+          maxWidth: collapsed ? 80 : siderWidth,
+          minWidth: collapsed ? 80 : siderWidth,
+          ...style,
+        }}
+      />
+    )}
     <Sider
       collapsible
       trigger={null}
@@ -104,7 +116,9 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
           }
         }
       }}
-      style={style}
+      style={{
+        overflow: 'hidden', ...style
+      }}
       width={siderWidth}
       theme={theme}
       className={siderClassName}
@@ -118,9 +132,19 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
           {headerDom}
         </div>
       )}
-      {flatMenuKeys && (
-        <BaseMenu {...props} mode="inline" handleOpenChange={onOpenChange} />
-      )}
+      <div
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        }}
+      >
+        {flatMenuKeys && (
+          <BaseMenu {...props} mode="inline" style={{
+            width: '100%',
+          }} handleOpenChange={onOpenChange} />
+        )}
+      </div>
       {links && links.length > 0 && (
         <div className="ant-pro-sider-menu-links">
           <Menu
@@ -138,6 +162,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
         </div>
       )}
     </Sider>
+  </>
   );
 };
 

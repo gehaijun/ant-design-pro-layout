@@ -36,9 +36,9 @@ import { useDocumentTitle } from './utils/hooks';
 
 export interface BasicLayoutProps
   extends Partial<RouterTypes<Route>>,
-    SiderMenuProps,
-    HeaderViewProps,
-    Partial<Settings> {
+  SiderMenuProps,
+  HeaderViewProps,
+  Partial<Settings> {
   pure?: boolean;
   /**
    * logo url
@@ -345,9 +345,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
   // siderMenuDom 为空的时候，不需要 padding
   const genLayoutStyle: CSSProperties = {
-    paddingLeft: siderMenuDom
-      ? getPaddingLeft(!!hasLeftPadding, collapsed, siderWidth)
-      : undefined,
+    // paddingLeft: siderMenuDom
+    //   ? getPaddingLeft(!!hasLeftPadding, collapsed, siderWidth)
+    //   : undefined,
     position: 'relative',
   };
 
@@ -424,7 +424,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 };
 
 BasicLayout.defaultProps = {
-  logo: 'https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg',
   ...defaultSettings,
   location: isBrowser() ? window.location : undefined,
 };
