@@ -179,17 +179,6 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumb: { [path: string]: MenuDataItem };
 };
 
-const getPaddingLeft = (
-  hasLeftPadding: boolean,
-  collapsed: boolean | undefined,
-  siderWidth: number,
-): number | undefined => {
-  if (hasLeftPadding) {
-    return collapsed ? 80 : siderWidth;
-  }
-  return undefined;
-};
-
 /**
  * 🌃 Powerful and easy to use beautiful layout
  * 🏄‍ Support multiple topics and layout types
@@ -252,10 +241,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
   const isMobile =
     (colSize === 'sm' || colSize === 'xs') && !props.disableMobile;
-
-  // If it is a fix menu, calculate padding
-  // don't need padding in phone mode
-  const hasLeftPadding = fixSiderbar && PropsLayout !== 'topmenu' && !isMobile;
 
   const [collapsed, onCollapse] = useMergeValue<boolean>(false, {
     value: props.collapsed,
